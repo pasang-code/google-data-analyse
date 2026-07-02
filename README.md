@@ -12,8 +12,6 @@ An analysis of 12 months of Chicago bike-share trip data, looking for behavioura
 
 The data for this analysis comes from a public dataset collected and provided by the City of Chicago\*: a trips dataset of more than 21 million data points (trips), tracking 13 variables.
 
-![Schema of the trip tables](images/trip-table-schema.png)
-
 We limit the analysis to the past 12 months, October 2020 through September 2021, since this is the timeframe most relevant to our question.
 
 Checking the metadata that comes with the dataset, we find this note:
@@ -144,8 +142,6 @@ WHERE
   OR member_casual IS NULL
 ```
 
-![NULL count result](images/null-count.png)
-
 Digging further, it turns out all of these NULLs come down to the same problem: either a missing pair of coordinates (latitude, longitude), or coordinates recorded to only 2 decimal places, which leaves a wiggle room of roughly 1 km. Either way, there is no way to tell which station the trip belongs to. Since the station names of these trips can't be recovered, we decide to remove them.
 
 ```sql
@@ -235,8 +231,6 @@ CREATE TABLE
     T1.station_name = T2.station_name)
 ```
 
-![Preview of the station popularity table](images/pivot-table-preview.png)
-
 We look at the data per month, since ad campaigns tend to be planned, optimized and rolled out on a timescale of months anyway.
 
 ![Throughput of the top 10 stations throughout the year](images/top10-stations-by-month.png)
@@ -264,7 +258,9 @@ GROUP BY
   member_type
 ```
 
-![Summary by member type and distribution of trip duration](images/member-summary-and-duration.png)
+![Summary by member type](images/member-summary-table.png)
+
+![Distribution of trip duration by member type](images/trip-duration-distribution.png)
 
 *Distribution of trip duration by member type.*
 
